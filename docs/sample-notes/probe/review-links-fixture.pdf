@@ -1,0 +1,52 @@
+%PDF-1.7
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R /Annots [6 0 R 7 0 R 8 0 R 9 0 R 10 0 R] >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 122 >>
+stream
+BT /F1 20 Tf 50 740 Td (PDF review sample) Tj 0 -40 Td /F1 12 Tf (Native comments and replies for a project review.) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Annot /Subtype /Text /Rect [40 640 60 660] /T (Alice) /Contents (Parent review) /M (D:20261001100000Z) /NM (parent) /P 3 0 R >>
+endobj
+7 0 obj
+<< /Type /Annot /Subtype /Text /Rect [70 640 90 660] /T (Bob) /Contents (First reply) /M (D:20261001110000Z) /IRT 6 0 R /RT /R /NM (reply) /P 3 0 R >>
+endobj
+8 0 obj
+<< /Type /Annot /Subtype /Text /Rect [100 640 120 660] /T (Cara) /Contents (Nested reply) /M (D:20261001120000Z) /IRT 7 0 R /RT /R /NM (nested) /P 3 0 R >>
+endobj
+9 0 obj
+<< /Type /Annot /Subtype /Popup /Rect [40 400 240 600] /Parent 6 0 R /P 3 0 R >>
+endobj
+10 0 obj
+<< /Type /Annot /Subtype /Text /Rect [130 640 150 660] /T (Alice) /Contents (Parent review) /IRT 6 0 R /RT /Group /P 3 0 R >>
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000282 00000 n 
+0000000352 00000 n 
+0000000525 00000 n 
+0000000678 00000 n 
+0000000844 00000 n 
+0000001015 00000 n 
+0000001111 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+1253
+%%EOF

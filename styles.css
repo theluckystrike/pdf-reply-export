@@ -1,0 +1,40 @@
+.pdf-reply-export-modal {
+	width: min(860px, 94vw);
+}
+
+.pdf-reply-export-list {
+	max-height: 42vh;
+	overflow-y: auto;
+	padding: 8px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+}
+
+.pdf-reply-export-list ul {
+	padding-inline-start: 22px;
+}
+
+.pdf-reply-export-comment {
+	margin-block: 12px;
+}
+
+.pdf-reply-export-text {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	margin-top: 5px;
+}
+
+.pdf-reply-export-meta {
+	color: var(--text-muted);
+	font-size: var(--font-smaller);
+}
+
+.pdf-reply-export-status {
+	white-space: pre-wrap;
+	margin-block: 8px;
+	color: var(--text-muted);
+}
+
+.pdf-reply-export-filters .setting-item {
+	padding-block: 7px;
+}

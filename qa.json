@@ -1,0 +1,63 @@
+[
+  {
+    "feature": "comments",
+    "caption": "A native PDF discussion with Alice, Bob and Cara.",
+    "note": "Welcome.md",
+    "eval": "(async () => { const p = app.plugins.plugins['pdf-reply-export']; for (const d of p.dialogs) d.close(); app.setting.close(); p.pro.signOut(); const d = await p.previewFiles([app.vault.getFileByPath('PDF Reply Export/probe/review-links-fixture.pdf')], false); if (!d) throw new Error('Preview missing'); return 'ok'; })()",
+    "wait": 700,
+    "after": "for (const d of app.plugins.plugins['pdf-reply-export'].dialogs) d.close(); 'ok'"
+  },
+  {
+    "feature": "groups",
+    "caption": "Missing parents and cycles keep the comment text and page.",
+    "note": "Welcome.md",
+    "eval": "(async () => { const p = app.plugins.plugins['pdf-reply-export']; for (const d of p.dialogs) d.close(); app.setting.close(); p.pro.signOut(); const d = await p.previewFiles([app.vault.getFileByPath('PDF Reply Export/probe/edge-cases.pdf')], false); if (!d) throw new Error('Preview missing'); d.list.scrollTop = d.list.scrollHeight; return 'ok'; })()",
+    "wait": 700,
+    "after": "for (const d of app.plugins.plugins['pdf-reply-export'].dialogs) d.close(); 'ok'"
+  },
+  {
+    "feature": "review-note",
+    "caption": "A new review note with nested replies and source links.",
+    "note": "Welcome.md",
+    "eval": "(async () => { const p = app.plugins.plugins['pdf-reply-export']; for (const d of p.dialogs) d.close(); app.setting.close(); p.pro.signOut(); const d = await p.previewFiles([app.vault.getFileByPath('PDF Reply Export/probe/review-links-fixture.pdf')], false); if (!d) throw new Error('Preview missing'); const f = await p.writeReview(d.sources[0], 'Sample review'); window.__q31Note = f.path; d.close(); await app.workspace.getLeaf(false).setViewState({ type: 'markdown', state: { file: f.path, mode: 'preview' } }); return 'ok'; })()",
+    "wait": 700,
+    "after": "(async () => { const f = app.vault.getFileByPath(window.__q31Note); if (f) await app.vault.delete(f); return 'ok'; })()"
+  },
+  {
+    "feature": "filters",
+    "caption": "Pro selects the comments by Bob.",
+    "note": "Welcome.md",
+    "eval": "(async () => { const p = app.plugins.plugins['pdf-reply-export']; for (const d of p.dialogs) d.close(); app.setting.close(); p.pro.signOut(); p.pro.opts.http = async () => ({ status: 200, json: { data: { viewer: { login: 'demo-reader' }, user: { sponsorshipForViewerAsSponsor: { isActive: true, isOneTimePayment: false, tier: { name: '$5 a month', monthlyPriceInCents: 500 } } } } } }); app.secretStorage.setSecret('pdf-reply-export-github-token', 'gho_' + '0'.repeat(36)); await p.pro.refreshNow(); const d = await p.previewFiles([app.vault.getFileByPath('PDF Reply Export/probe/review-links-fixture.pdf')], false); if (!d) throw new Error('Preview missing'); const inputs = d.contentEl.querySelectorAll('.pdf-reply-export-filters input'); inputs[0].value = 'Bob'; inputs[0].dispatchEvent(new Event('input', { bubbles: true })); return 'ok'; })()",
+    "wait": 700,
+    "after": "for (const d of app.plugins.plugins['pdf-reply-export'].dialogs) d.close(); 'ok'"
+  },
+  {
+    "feature": "folder",
+    "caption": "Pro previews native comments in a selected PDF folder.",
+    "note": "Welcome.md",
+    "eval": "(async () => { const p = app.plugins.plugins['pdf-reply-export']; for (const d of p.dialogs) d.close(); app.setting.close(); p.pro.signOut(); p.pro.opts.http = async () => ({ status: 200, json: { data: { viewer: { login: 'demo-reader' }, user: { sponsorshipForViewerAsSponsor: { isActive: true, isOneTimePayment: false, tier: { name: '$5 a month', monthlyPriceInCents: 500 } } } } } }); app.secretStorage.setSecret('pdf-reply-export-github-token', 'gho_' + '0'.repeat(36)); await p.pro.refreshNow(); const d = await p.previewFiles([app.vault.getFileByPath('PDF Reply Export/probe/review-links-fixture.pdf'), app.vault.getFileByPath('PDF Reply Export/probe/edge-cases.pdf'), app.vault.getFileByPath('PDF Reply Export/probe/empty.pdf')], true); if (!d) throw new Error('Preview missing'); return 'ok'; })()",
+    "wait": 700,
+    "after": "for (const d of app.plugins.plugins['pdf-reply-export'].dialogs) d.close(); 'ok'; app.plugins.plugins['pdf-reply-export'].pro.signOut(); 'ok'"
+  },
+  {
+    "feature": "pdf-reply-export",
+    "caption": "Preview the PDF discussion and write a review note.",
+    "frames": [
+      {
+        "note": "Welcome.md",
+        "eval": "(async () => { const p = app.plugins.plugins['pdf-reply-export']; for (const d of p.dialogs) d.close(); app.setting.close(); p.pro.signOut(); const d = await p.previewFiles([app.vault.getFileByPath('PDF Reply Export/probe/review-links-fixture.pdf')], false); if (!d) throw new Error('Preview missing'); return 'ok'; })()",
+        "hold": 1500
+      },
+      {
+        "eval": "(async () => { const p = app.plugins.plugins['pdf-reply-export']; for (const d of p.dialogs) d.close(); app.setting.close(); p.pro.signOut(); const d = await p.previewFiles([app.vault.getFileByPath('PDF Reply Export/probe/review-links-fixture.pdf')], false); if (!d) throw new Error('Preview missing'); const f = await p.writeReview(d.sources[0], 'Sample review'); window.__q31Note = f.path; d.close(); await app.workspace.getLeaf(false).setViewState({ type: 'markdown', state: { file: f.path, mode: 'preview' } }); return 'ok'; })()",
+        "hold": 1800
+      },
+      {
+        "note": "Welcome.md",
+        "eval": "(async () => { const p = app.plugins.plugins['pdf-reply-export']; for (const d of p.dialogs) d.close(); app.setting.close(); p.pro.signOut(); const d = await p.previewFiles([app.vault.getFileByPath('PDF Reply Export/probe/edge-cases.pdf')], false); if (!d) throw new Error('Preview missing'); d.list.scrollTop = d.list.scrollHeight; return 'ok'; })()",
+        "hold": 1500
+      }
+    ],
+    "after": "(async () => { for (const d of app.plugins.plugins['pdf-reply-export'].dialogs) d.close(); const f = app.vault.getFileByPath(window.__q31Note); if (f) await app.vault.delete(f); app.plugins.plugins['pdf-reply-export'].pro.signOut(); return 'ok'; })()"
+  }
+]

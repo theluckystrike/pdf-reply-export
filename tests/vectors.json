@@ -1,0 +1,804 @@
+{
+  "slug": "pdf-reply-export",
+  "module": "pdf-reply-export/src/logic",
+  "function": "evalVector",
+  "cases": [
+    {
+      "name": "Fixture parent and nested replies",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "",
+              "text": "Parent review",
+              "page": 1
+            },
+            {
+              "id": "b",
+              "parent": "a",
+              "author": "Bob",
+              "date": "",
+              "text": "First reply",
+              "page": 1
+            },
+            {
+              "id": "c",
+              "parent": "b",
+              "author": "Cara",
+              "date": "",
+              "text": "Nested reply",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Comments"
+        ],
+        [
+          "b",
+          1,
+          "Comments"
+        ],
+        [
+          "c",
+          2,
+          "Comments"
+        ]
+      ]
+    },
+    {
+      "name": "Reverse array dates sort replies",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "",
+              "text": "Parent review",
+              "page": 1
+            },
+            {
+              "id": "c",
+              "parent": "a",
+              "author": "Alice",
+              "date": "2026-10-02T00:00:00.000Z",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "b",
+              "parent": "a",
+              "author": "Alice",
+              "date": "2026-10-01T00:00:00.000Z",
+              "text": "Comment",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Comments"
+        ],
+        [
+          "b",
+          1,
+          "Comments"
+        ],
+        [
+          "c",
+          1,
+          "Comments"
+        ]
+      ]
+    },
+    {
+      "name": "Missing parent retains record",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "gone",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Missing parents"
+        ]
+      ]
+    },
+    {
+      "name": "Missing parent has nested reply",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "gone",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "b",
+              "parent": "a",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Missing parents"
+        ],
+        [
+          "b",
+          1,
+          "Missing parents"
+        ]
+      ]
+    },
+    {
+      "name": "Two records form a cycle",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "b",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "b",
+              "parent": "a",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Cycles"
+        ],
+        [
+          "b",
+          1,
+          "Cycles"
+        ]
+      ]
+    },
+    {
+      "name": "Self cycle",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "a",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Cycles"
+        ]
+      ]
+    },
+    {
+      "name": "Cycle branch appears once",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "b",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "b",
+              "parent": "a",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "c",
+              "parent": "b",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Cycles"
+        ],
+        [
+          "b",
+          1,
+          "Cycles"
+        ],
+        [
+          "c",
+          2,
+          "Cycles"
+        ]
+      ]
+    },
+    {
+      "name": "Unknown author and date keep text",
+      "args": [
+        "parse",
+        [
+          [
+            {
+              "id": "a",
+              "subtype": "Text",
+              "contentsObj": {
+                "str": "Comment"
+              }
+            }
+          ],
+          1
+        ]
+      ],
+      "expected": [
+        {
+          "id": "a",
+          "parent": "",
+          "author": "Unknown author",
+          "date": "",
+          "text": "Comment",
+          "page": 1
+        }
+      ]
+    },
+    {
+      "name": "Escape heading pipe and HTML",
+      "args": [
+        "escape",
+        [
+          "# Heading | <script>"
+        ]
+      ],
+      "expected": "\\# Heading \\| &lt;script&gt;"
+    },
+    {
+      "name": "Existing note gets second name",
+      "args": [
+        "path",
+        [
+          "",
+          "Review",
+          [
+            "Review.md"
+          ]
+        ]
+      ],
+      "expected": "Review (2).md"
+    },
+    {
+      "name": "Existing second note gets third name",
+      "args": [
+        "path",
+        [
+          "Notes",
+          "Review.md",
+          [
+            "Notes/Review.md",
+            "Notes/Review (2).md"
+          ]
+        ]
+      ],
+      "expected": "Notes/Review (3).md"
+    },
+    {
+      "name": "Cancel writes nothing",
+      "args": [
+        "decision",
+        [
+          true,
+          3
+        ]
+      ],
+      "expected": "Cancelled"
+    },
+    {
+      "name": "Empty PDF writes nothing",
+      "args": [
+        "decision",
+        [
+          false,
+          0
+        ]
+      ],
+      "expected": "No comments"
+    },
+    {
+      "name": "Nonempty preview allows write",
+      "args": [
+        "decision",
+        [
+          false,
+          3
+        ]
+      ],
+      "expected": "Write new note"
+    },
+    {
+      "name": "Popup and RT Group excluded",
+      "args": [
+        "parse",
+        [
+          [
+            {
+              "id": "p",
+              "subtype": "Popup",
+              "contents": "Duplicate"
+            },
+            {
+              "id": "g",
+              "subtype": "Text",
+              "replyType": "Group",
+              "contents": "Duplicate"
+            }
+          ],
+          1
+        ]
+      ],
+      "expected": []
+    },
+    {
+      "name": "Native modification date and object strings",
+      "args": [
+        "parse",
+        [
+          [
+            {
+              "id": "a",
+              "subtype": "Highlight",
+              "titleObj": {
+                "str": "Bob"
+              },
+              "contentsObj": {
+                "str": "Text"
+              },
+              "modificationDate": "D:20261001120000Z"
+            }
+          ],
+          2
+        ]
+      ],
+      "expected": [
+        {
+          "id": "a",
+          "parent": "",
+          "author": "Bob",
+          "date": "2026-10-01T12:00:00.000Z",
+          "text": "Text",
+          "page": 2
+        }
+      ]
+    },
+    {
+      "name": "Invalid modification falls back to creation",
+      "args": [
+        "parse",
+        [
+          [
+            {
+              "id": "a",
+              "subtype": "Text",
+              "contents": "Text",
+              "modificationDate": "bad",
+              "creationDate": "D:20261001"
+            }
+          ],
+          1
+        ]
+      ],
+      "expected": [
+        {
+          "id": "a",
+          "parent": "",
+          "author": "Unknown author",
+          "date": "2026-10-01T00:00:00.000Z",
+          "text": "Text",
+          "page": 1
+        }
+      ]
+    },
+    {
+      "name": "Bad date stays unknown",
+      "args": [
+        "date",
+        [
+          "D:20260230000000Z"
+        ]
+      ],
+      "expected": ""
+    },
+    {
+      "name": "Positive PDF timezone",
+      "args": [
+        "date",
+        [
+          "D:20261001120000+02'30'"
+        ]
+      ],
+      "expected": "2026-10-01T09:30:00.000Z"
+    },
+    {
+      "name": "Negative PDF timezone",
+      "args": [
+        "date",
+        [
+          "D:20261001120000-02'00'"
+        ]
+      ],
+      "expected": "2026-10-01T14:00:00.000Z"
+    },
+    {
+      "name": "Year only date",
+      "args": [
+        "date",
+        [
+          "D:2026"
+        ]
+      ],
+      "expected": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "name": "Bad month date",
+      "args": [
+        "date",
+        [
+          "D:20261301"
+        ]
+      ],
+      "expected": ""
+    },
+    {
+      "name": "ISO date normalizes UTC",
+      "args": [
+        "date",
+        [
+          "2026-10-01T12:00:00+02:00"
+        ]
+      ],
+      "expected": "2026-10-01T10:00:00.000Z"
+    },
+    {
+      "name": "Page one source",
+      "args": [
+        "link",
+        [
+          "probe/review-links-fixture.pdf",
+          1
+        ]
+      ],
+      "expected": "[Page 1](<probe/review-links-fixture.pdf#page=1>)"
+    },
+    {
+      "name": "Source path metacharacters",
+      "args": [
+        "link",
+        [
+          "C# guide [x].pdf",
+          3
+        ]
+      ],
+      "expected": "[Page 3](<C%23%20guide%20%5Bx%5D.pdf#page=3>)"
+    },
+    {
+      "name": "Duplicate IDs appear once",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "",
+              "text": "Parent review",
+              "page": 1
+            },
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "",
+              "text": "Parent review",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Comments"
+        ]
+      ]
+    },
+    {
+      "name": "Unrelated empty highlight is omitted",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "",
+              "text": "",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": []
+    },
+    {
+      "name": "Empty parent with a reply is retained",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "",
+              "text": "",
+              "page": 1
+            },
+            {
+              "id": "b",
+              "parent": "a",
+              "author": "Bob",
+              "date": "",
+              "text": "First reply",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          0,
+          "Comments"
+        ],
+        [
+          "b",
+          1,
+          "Comments"
+        ]
+      ]
+    },
+    {
+      "name": "Free ignores Pro filters",
+      "args": [
+        "filter",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "2026-10-02T00:00:00.000Z",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "b",
+              "parent": "",
+              "author": "Bob",
+              "date": "2026-10-01T00:00:00.000Z",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "c",
+              "parent": "",
+              "author": "Bob",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            }
+          ],
+          {
+            "author": "Bob",
+            "from": "2026-10-01",
+            "to": "2026-10-01"
+          },
+          false
+        ]
+      ],
+      "expected": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "name": "Pro author exact match and inclusive day",
+      "args": [
+        "filter",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "2026-10-02T00:00:00.000Z",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "b",
+              "parent": "",
+              "author": "Bob",
+              "date": "2026-10-01T00:00:00.000Z",
+              "text": "Comment",
+              "page": 1
+            },
+            {
+              "id": "c",
+              "parent": "",
+              "author": "Bob",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            }
+          ],
+          {
+            "author": "Bob",
+            "from": "2026-10-01",
+            "to": "2026-10-01"
+          },
+          true
+        ]
+      ],
+      "expected": [
+        "b",
+        "c"
+      ]
+    },
+    {
+      "name": "Unknown dates survive date filter",
+      "args": [
+        "filter",
+        [
+          [
+            {
+              "id": "a",
+              "parent": "",
+              "author": "Alice",
+              "date": "",
+              "text": "Comment",
+              "page": 1
+            }
+          ],
+          {
+            "author": "",
+            "from": "2026-10-01",
+            "to": ""
+          },
+          true
+        ]
+      ],
+      "expected": [
+        "a"
+      ]
+    },
+    {
+      "name": "Filtered parent yields missing group",
+      "args": [
+        "groups",
+        [
+          [
+            {
+              "id": "b",
+              "parent": "a",
+              "author": "Bob",
+              "date": "",
+              "text": "First reply",
+              "page": 1
+            }
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          "b",
+          0,
+          "Missing parents"
+        ]
+      ]
+    },
+    {
+      "name": "Safe output name",
+      "args": [
+        "path",
+        [
+          "",
+          "../Review: one",
+          []
+        ]
+      ],
+      "expected": ".. Review  one.md"
+    },
+    {
+      "name": "ISO impossible day is unknown",
+      "args": [
+        "date",
+        [
+          "2026-02-30T12:00:00Z"
+        ]
+      ],
+      "expected": ""
+    }
+  ]
+}
