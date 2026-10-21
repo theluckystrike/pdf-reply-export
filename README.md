@@ -50,7 +50,7 @@ Read errors appear in the preview status. Empty PDFs produce no notes. Write err
 
 For manual installation, copy main.js, manifest.json and styles.css from a release into `<vault>/.obsidian/plugins/pdf-reply-export/`. Open Settings, Community plugins, and enable PDF Reply Export. Use Obsidian 1.13.4 or later.
 
-When the plugin is listed in the community directory, you can search for PDF Reply Export from the Browse button and install it there. This document does not confirm a directory listing.
+To install from the community directory, open Settings, Community plugins, then Browse, and search for PDF Reply Export.
 
 ## Usage
 
@@ -64,6 +64,8 @@ The preview is a snapshot. If another application changes the PDF after you open
 
 ## Settings
 
+After a minor or major update, this plugin opens one What's new tab in the background. The tab and settings card suggest other NoteMods plugins and Zovo Chat and link to notemods.com for feedback ([privacy](https://notemods.com/privacy/)). The tab sends no data. Turn the tab off in Settings.
+
 The plugin settings contain the GitHub Sponsors controls. Use them to sponsor, sign in, refresh the sponsorship check or sign out. The status tells you whether Pro is on. Note names and filters are inputs in the preview; they are not saved between previews. There is no background PDF scan.
 
 The active PDF command remains available in free mode. Folder export checks the Pro state before it reads the folder and before it writes the notes. If Pro turns off during a batch, the batch stops before the next PDF output. Review the completion notice for the written count.
@@ -76,7 +78,7 @@ What happens to incomplete metadata? Missing authors show “Unknown author”. 
 
 Which environments were not tested? Android, iOS, Linux and Windows desktop, password protected PDFs, external review services, scanned document OCR and large production PDF archives were not tested. The desktop checks use local fixture PDFs on macOS. Live GitHub sign in and payments were not tested; Pro tests use a local sponsorship response. This version has no password entry interface. Mobile compatibility is not a test result.
 
-Can I undo an export? The output is a new Markdown file. Delete that output through Obsidian if you do not need it. A failed folder export can leave notes written before the failure. No existing review note is selected for replacement.
+Can I undo an export? The output is a new Markdown file. Delete that output through Obsidian if you do not need it.
 
 ## Payment, account and network
 
@@ -92,6 +94,6 @@ After a successful check, Pro can work offline for up to 14 days. Sign out or a 
 
 ## Support
 
-After the public source repository is available, report a reproducible problem at its [project issue page](https://github.com/theluckystrike/pdf-reply-export/issues). Include the plugin version, Obsidian version, platform, command and the message shown in the preview or notice. Use a small PDF with made up names and text when you can reproduce the problem in it. Remove private comments before sharing a fixture.
+Report a reproducible problem at its [project issue page](https://github.com/theluckystrike/pdf-reply-export/issues). Include the plugin version, Obsidian version, platform, command and the message shown in the preview or notice. Use a small PDF with made up names and text when you can reproduce the problem in it. Remove private comments before sharing a fixture.
 
 PDF Reply Export is a project by theluckystrike at [notemods.com](https://notemods.com). The source uses the MIT license. Support requests and file attachments are sent by you through the chosen website; the plugin does not send a support report.

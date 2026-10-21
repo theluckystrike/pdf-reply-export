@@ -124,9 +124,12 @@ describe('review regressions', () => {
 	it('has no heading for the single settings section', () => {
 		const { p, app } = plugin();
 		p.onload();
-		const definitions = new PdfReplyExportSettingTab(app as never, p).getSettingDefinitions();
+		const tab = new PdfReplyExportSettingTab(app as never, p);
+		const definitions = tab.productSettingDefinitions();
 		expect(definitions).toHaveLength(2);
 		expect(definitions.every((item) => !('heading' in item))).toBe(true);
+		// The tab ends with the "More from NoteMods" group of packages/hello, the only heading.
+		expect(tab.getSettingDefinitions().slice(2)).toEqual([expect.objectContaining({ type: 'group', heading: 'More from NoteMods' })]);
 		p.unload();
 	});
 

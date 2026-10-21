@@ -1,7 +1,7 @@
 {
 	"id": "pdf-reply-export",
 	"name": "PDF Reply Export",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"minAppVersion": "1.13.4",
 	"description": "Export PDF review comments and their replies as a Markdown note.",
 	"author": "Michael Lip",

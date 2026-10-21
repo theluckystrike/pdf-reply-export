@@ -7,6 +7,8 @@ import { PdfReplyExportSettingTab } from './settings';
 import { ReviewModal, FolderModal, type ReviewSource } from './modal';
 import { EMPTY_FILTERS, filterComments, groupComments, newPath, renderReview, type Filters, type ReviewComment } from './logic';
 import { readComments } from './pdf';
+import { setupHello } from './hello/index';
+import WHATS_NEW from './whats-new.json';
 
 export default class PdfReplyExportPlugin extends Plugin {
 	pro: SponsorsManager | null = null;
@@ -16,6 +18,8 @@ export default class PdfReplyExportPlugin extends Plugin {
 	private disposed = false;
 	private reader: AbortController | null = null;
 	onload(): void {
+		// First: "What's new" reads its state before the settings load (packages/hello). It does not wait.
+		setupHello(this, WHATS_NEW);
 		const pro = createGitHubSponsors(this.app, this.manifest.id, SPONSORS, this);
 		pro.init();
 		this.pro = pro;

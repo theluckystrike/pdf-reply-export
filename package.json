@@ -1,6 +1,6 @@
 {
 	"name": "pdf-reply-export",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"private": true,
 	"description": "Export PDF review comments and their replies as a Markdown note.",
 	"main": "main.js",
