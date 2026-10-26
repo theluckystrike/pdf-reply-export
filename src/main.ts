@@ -2,7 +2,7 @@
 import { Notice, Plugin, normalizePath, type TFile } from 'obsidian';
 import type { SponsorsManager } from './license/index';
 import { createGitHubSponsors } from './license/github-obsidian';
-import { SPONSORS, bindPro, isPro, resetPro } from './pro';
+import { SPONSORS, bindPro, isPro, resetPro, proNotice } from './pro';
 import { PdfReplyExportSettingTab } from './settings';
 import { ReviewModal, FolderModal, type ReviewSource } from './modal';
 import { EMPTY_FILTERS, filterComments, groupComments, newPath, renderReview, type Filters, type ReviewComment } from './logic';
@@ -39,7 +39,7 @@ export default class PdfReplyExportPlugin extends Plugin {
 			return true;
 		} });
 		this.addCommand({ id: 'preview-pdf-folder', name: 'Export a PDF folder (Pro)', callback: () => {
-			if (!isPro()) { new Notice('Folder export needs Pro. Open the plugin settings to sign in with GitHub.'); return; }
+			if (!isPro()) { proNotice('Folder export needs Pro.'); return; }
 			const dialog = new FolderModal(this); this.dialogs.add(dialog); dialog.open();
 		} });
 	}
@@ -87,7 +87,7 @@ export default class PdfReplyExportPlugin extends Plugin {
 	}
 	async exportSources(sources: ReviewSource[], name: string, filters: Filters, batch: boolean): Promise<TFile[]> {
 		if (this.writing || this.disposed) return [];
-		if (batch && !isPro()) { new Notice('Folder export needs Pro.'); return []; }
+		if (batch && !isPro()) { proNotice('Folder export needs Pro.'); return []; }
 		this.writing = true;
 		const written: TFile[] = [], errors: string[] = [];
 		try {

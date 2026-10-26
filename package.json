@@ -1,7 +1,6 @@
 {
 	"name": "pdf-reply-export",
-	"repository": {"type": "git", "url": "theluckystrike/pdf-reply-export.git"},
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"private": true,
 	"description": "Export PDF review comments and their replies as a Markdown note.",
 	"main": "main.js",

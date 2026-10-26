@@ -2,7 +2,7 @@
 import { Modal, Notice, Setting, normalizePath, type TFile } from 'obsidian';
 import type PdfReplyExportPlugin from './main';
 import { EMPTY_FILTERS, type Filters, type ReviewComment } from './logic';
-import { isPro, onProChange } from './pro';
+import { isPro, onProChange, proNotice } from './pro';
 export interface ReviewSource { file: TFile; comments: ReviewComment[] }
 
 export class ReviewModal extends Modal {
@@ -82,7 +82,7 @@ export class FolderModal extends Modal {
 		let folder = '';
 		new Setting(this.contentEl).setName('Vault folder').setDesc('Vault relative path. Empty selects the vault root. Subfolders are included.').addText((t) => t.onChange((s) => { folder = s; }));
 		new Setting(this.contentEl).addButton((b) => b.setButtonText('Preview folder').setCta().onClick(async () => {
-			if (!isPro()) { new Notice('Folder export needs Pro.'); return; }
+			if (!isPro()) { proNotice('Folder export needs Pro.'); return; }
 			const path = normalizePath(folder);
 			if (path && !this.app.vault.getFolderByPath(path)) { new Notice('Folder not found.'); return; }
 			const files = this.app.vault.getFiles().filter((f) => f.extension.toLowerCase() === 'pdf' && (!path || f.path.startsWith(path + '/'))).sort((a, c) => a.path.localeCompare(c.path));
