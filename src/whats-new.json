@@ -1,8 +1,9 @@
 {
 	"id": "pdf-reply-export",
 	"name": "PDF Reply Export",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"changes": [
+		"The Pro notice of PDF Reply Export now says that one payment turns on Pro in every NoteMods plugin.",
 		"The Pro notice for folder export now has a Sponsor on GitHub button."
 	],
 	"tip": "Run \"Preview comments from the active PDF\" to read the comments and replies before you write a note.",
